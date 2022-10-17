@@ -174,7 +174,7 @@ knitr::opts_chunk$set(
   out.width = "90%"
 )
 
-theme_set(theme_minimal() + theme(legened.poisiton = "bottom")) #always do this everyhwere
+theme_set(theme_minimal() + theme(legend.position = "bottom")) #always do this everyhwere
 
 options(
   ggplot2.continuous.color = "viridis",
@@ -184,5 +184,21 @@ options(
 scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 
+```
+
+## Data args in `geom`
+
+```{r}
+central_park =
+  weather_df %>% 
+  filter(name == "CentralPark_NY")
+
+waikiki =
+  weather_df %>% 
+  filter(name == "Waikiki_HA")
+
+ggplot(data = waikiki, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = central_park)
 ```
 
