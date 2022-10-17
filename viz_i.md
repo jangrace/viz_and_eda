@@ -332,3 +332,11 @@ weather_plot
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](viz_i_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+weather_plot
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_i_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
