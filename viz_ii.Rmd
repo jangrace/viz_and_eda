@@ -50,3 +50,62 @@ weather_df %>%
     caption = "Data from rnoaa package; temperatures in 2017."
   )
 ```
+
+## Scales (USE `SCALE`)
+
+Start with the same plot
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+  scale_x_continuous(
+    breaks = c(-15, 0, 15),
+    labels = c("-15 C", "0", "15")
+  ) +
+  scale_y_continuous(
+    trans = "sqrt" #trans = transformation (i.e., sqrt, log)
+  )
+```
+
+## Color scales
+
+### using scale_color_hue
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+  scale_color_hue(
+    name = "Location", #change index for color from "name" to "locations"
+    h = c(50,300)) #color scale (h = hue of the scale)
+```
+
+### using VIRIDIS for color palette/options
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+    viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE)
+
+```
+
