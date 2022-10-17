@@ -258,7 +258,7 @@ scale_colour_discrete = scale_color_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-## Data args in `geom`
+## Data args in `geom` = getting different behaviors
 
 ``` r
 central_park =
@@ -277,3 +277,96 @@ ggplot(data = waikiki, aes(x = date, y = tmax, color = name)) +
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](viz_ii_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+## `patchwork`
+
+remember faceting?
+
+regular vs.
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .5)
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_density).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+facetted
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_density).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+what happens when i want multi-panel plot (i.e., scatter & histogram)?
+This is where patchwork comes in
+
+``` r
+tmax_tmin_plot =
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+
+prcp_dens_p = 
+  weather_df %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5) # don't see much, so try
+
+prcp_dens_p = 
+  weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5)
+
+tmax_date_p =
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  theme(legend.position = "none")
+```
+
+Now we gonna use patchwork to put prcp_dens, tmax_date,tmax_tmin
+together:
+
+1.  putting side-by-side
+
+``` r
+tmax_tmin_plot + prcp_dens_p + tmax_date_p
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+2.  putting side by side & below ( / = below)
+
+``` r
+(tmax_tmin_plot + prcp_dens_p) / tmax_date_p
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->

@@ -186,7 +186,7 @@ scale_fill_discrete = scale_fill_viridis_d
 
 ```
 
-## Data args in `geom`
+## Data args in `geom` = getting different behaviors
 
 ```{r}
 central_park =
@@ -200,5 +200,63 @@ waikiki =
 ggplot(data = waikiki, aes(x = date, y = tmax, color = name)) +
   geom_point() +
   geom_line(data = central_park)
+```
+
+## `patchwork`
+
+remember faceting?
+
+regular vs.
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .5)
+```
+
+facetted
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, fill = name)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+what happens when i want multi-panel plot (i.e., scatter & histogram)? This is where patchwork comes in
+```{r}
+tmax_tmin_plot =
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = .5) +
+  theme(legend.position = "none")
+
+prcp_dens_p = 
+  weather_df %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5) # don't see much, so try
+
+prcp_dens_p = 
+  weather_df %>% 
+  filter(prcp > 0) %>% 
+  ggplot(aes(x = prcp, fill = name)) +
+  geom_density(alpha = .5)
+
+tmax_date_p =
+  weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  theme(legend.position = "none")
+```
+
+Now we gonna use patchwork to put prcp_dens, tmax_date,tmax_tmin together:
+
+1. putting side-by-side
+```{r}
+tmax_tmin_plot + prcp_dens_p + tmax_date_p
+```
+
+2. putting side by side & below ( / = below)
+```{r}
+(tmax_tmin_plot + prcp_dens_p) / tmax_date_p
 ```
 
