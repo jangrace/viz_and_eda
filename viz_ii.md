@@ -370,3 +370,66 @@ tmax_tmin_plot + prcp_dens_p + tmax_date_p
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](viz_ii_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+## Data Manipulation
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+I want to manipulate my data so the order of names is different (i.e.,
+not alphabetical but low to high) CONTROL YOUR FACTORS!
+
+``` r
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA")) ## re-arrange so Waikiki comes first
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+What if I want densities for tmin & tmax simultaneously?
+
+``` r
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observations",
+    values_to = "temp"
+  ) %>% 
+  ggplot(aes(x = temp, fill = observations)) +
+  geom_density(alpha = .5)
+```
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+What if I wanna do the same for all 3 names?
+
+``` r
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observations",
+    values_to = "temp"
+  ) %>% 
+  ggplot(aes(x = temp, fill = observations)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
+    ## Warning: Removed 18 rows containing non-finite values (stat_density).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->

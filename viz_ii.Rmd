@@ -260,3 +260,49 @@ tmax_tmin_plot + prcp_dens_p + tmax_date_p
 (tmax_tmin_plot + prcp_dens_p) / tmax_date_p
 ```
 
+## Data Manipulation
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+I want to manipulate my data so the order of names is different (i.e., not alphabetical but low to high)
+CONTROL YOUR FACTORS!
+```{r}
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA")) ## re-arrange so Waikiki comes first
+  ) %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.5)
+```
+
+What if I want densities for tmin & tmax simultaneously?
+```{r}
+weather_df %>% 
+  filter(name == "CentralPark_NY") %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observations",
+    values_to = "temp"
+  ) %>% 
+  ggplot(aes(x = temp, fill = observations)) +
+  geom_density(alpha = .5)
+```
+
+What if I wanna do the same for all 3 names?
+```{r}
+weather_df %>% 
+  pivot_longer(
+    tmax:tmin,
+    names_to = "observations",
+    values_to = "temp"
+  ) %>% 
+  ggplot(aes(x = temp, fill = observations)) +
+  geom_density(alpha = .5) +
+  facet_grid(. ~ name)
+```
+
