@@ -109,3 +109,57 @@ weather_df %>%
 
 ```
 
+## Themes
+1. move legend location
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+   viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE) +
+  theme(legend.position = "bottom") #move legend from right to bottom
+```
+
+2. change the overall theme
+
+A. option 1 (theme_minimal)
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+   viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE) +
+  theme_minimal() + #theme (minimal, bw, etc)
+```
+
+B. option 2 (ggthemes)
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+   viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE) +
+  ggthemes::theme_excel()
+```
+
