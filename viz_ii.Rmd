@@ -143,7 +143,7 @@ weather_df %>%
    viridis::scale_color_viridis(
       name = "Location",
       discrete = TRUE) +
-  theme_minimal() + #theme (minimal, bw, etc)
+  theme_minimal() #theme (minimal, bw, etc)
 ```
 
 B. option 2 (ggthemes)

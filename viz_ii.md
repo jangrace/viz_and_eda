@@ -165,3 +165,115 @@ weather_df %>%
     ## Warning: Removed 15 rows containing missing values (geom_point).
 
 ![](viz_ii_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+## Themes
+
+1.  move legend location
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+   viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE) +
+  theme(legend.position = "bottom") #move legend from right to bottom
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+2.  change the overall theme
+
+A. option 1 (theme_minimal)
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+   viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE) +
+  theme_minimal() #theme (minimal, bw, etc)
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+B. option 2 (ggthemes)
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.5) +
+  labs(
+    title = "Temperature plot",
+    x = "Min daily temperature (C)",
+    y = "Max daily temperature (C)",
+    caption = "Data from rnoaa package; temperatures in 2017."
+  ) +
+   viridis::scale_color_viridis(
+      name = "Location",
+      discrete = TRUE) +
+  ggthemes::theme_excel()
+```
+
+    ## Warning: Removed 15 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+## Setting options
+
+``` r
+library(tidyverse)
+
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%"
+)
+
+theme_set(theme_minimal() + theme(legend.position = "bottom")) #always do this everyhwere
+
+options(
+  ggplot2.continuous.color = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_color_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
+```
+
+## Data args in `geom`
+
+``` r
+central_park =
+  weather_df %>% 
+  filter(name == "CentralPark_NY")
+
+waikiki =
+  weather_df %>% 
+  filter(name == "Waikiki_HA")
+
+ggplot(data = waikiki, aes(x = date, y = tmax, color = name)) +
+  geom_point() +
+  geom_line(data = central_park)
+```
+
+    ## Warning: Removed 3 rows containing missing values (geom_point).
+
+![](viz_ii_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
